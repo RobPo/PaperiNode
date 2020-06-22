@@ -1,30 +1,9 @@
-Example: 01_SerialPrintDevEUI
--------------------
-Prints the individual Device EUI address to the serial console. 
-
-Example: 02_Hello World
--------------------
-Shows the first text on the epd screen.
-
-Example: 03_SaveImgToFlash
--------------------
-Shows how to store upto 7 pictures on the flash memory.
-
-Example: 04_MeasVScap
--------------------
-Example which prints the measured voltage of the supercap storage device on the epd screen.
-
-Example: 05_Minimal
--------------------
-Demonstrates a simple counter, being updated everytime if there is sufficient energy harvested. The supercap voltage v_scap is measured minutely while the ATmega328pb processor is in deep sleep all remaining time. Triggering is done via external RTC to minimize current consumption during deep sleep phase. IF the voltage is charged above a certain limit (ie 4.2V), an image update is triggered. 
 
 Example: 06_WeatherForecast
 -------------------
-Adds a LoRa up- and downlink on top of the previous template; the received payload is then shown on the screen.
+### 1) Register PaperiNode at your TTN Console
 
-### 1) Register LoraPaper at your TTN Console
-
-Now its time to add LoraPaper as new device to the TTN Console. After login, please select 'application' and 'register device'. Please add the Device ID and Device EUI  in the fields as provided with LoraPaper and select 'Register'. Then please reselect your newly added device and open the 'settings' view again. You will now see the new generated keys, please copy Device Adress, Network Session Key and the App Session Key since they will be added into the source code lateron. Finally, select 'ABP' as activation methode and deactivate 'frame counter checks'.
+Now its time to add PaperiNode as new device to the TTN Console. After login, please select 'application' and 'register device'. Please add the Device ID and Device EUI  in the fields as provided with LoraPaper and select 'Register'. Then please reselect your newly added device and open the 'settings' view again. You will now see the new generated keys, please copy Device Adress, Network Session Key and the App Session Key since they will be added into the source code lateron. Finally, select 'ABP' as activation methode and deactivate 'frame counter checks'.
 
 ### 2) Schedule downloadable data at your TTN console with NodeRED
 
