@@ -1,7 +1,7 @@
-LoraPaper Arduino Library
+PaperiNode Arduino Library
 ===============================================================
 
-Welcome to the docs! This is an Arduino Library for LoraPaper, a TTN-connected 1.1” E-Paper node which is powered by ambient light and thus energy-autark. 
+Welcome to the docs! This is an Arduino Library for PaperiNode, a TTN-connected 1.1” E-Paper Node which is powered by ambient light and thus energy-autark. 
 
 
 ![lorapaper2](https://user-images.githubusercontent.com/21104467/71319613-09bdf500-24a1-11ea-9b56-77f6731cf4ea.png) 
@@ -21,7 +21,7 @@ How To Use
 
 ### Installation
 
-Please download and start the latest Arduino IDE. Select "Arduino Mini" in the menu Tools/Board; if not available please download this board from the Boards Manager. Please select "Atmega328p" in the Tools/Processor menu. Now please download and import the examples of this repository.
+Please download and start the latest Arduino IDE. Select "Pololu A-star 328pb, 5V/16MHz" in the menu Tools/Board; if not available please add to File>Preferences>Additional Boards Manager URL the following source "https://files.pololu.com/arduino/package_pololu_index.json". Now please download and import the examples of this repository.
 
 ### Hardware hookup
 
