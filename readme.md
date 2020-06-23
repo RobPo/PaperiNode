@@ -9,12 +9,12 @@ Welcome to the docs! This is an Arduino Library for PaperiNode, a TTN-connected 
 
 Hardware specification:
 -----------------------
-- MCU: ATmega328pb(16MHz, 32KB FLASH, 2KB SRAM )
-- LoRa Chip: RFM95W, Antenna EU_863_870
+- MCU: ATmega328pb (16MHz, 32KB FLASH, 2KB SRAM)
+- LoRa Chip: RFM95W, Antenna EU_863_870 or u.FL connector for external antenna
 - Flash: Winbond W25X40Cl, 4Mbit
 - Low power design:	Deep Sleep 2.4uA
 - PV cells: IXYS SLMD121H04L
-- Energy-harvesting PMIC: E-Peas AEM10941 
+- Energy-harvesting PMIC: E-Peas AEM10941 w/ MPPT
 - Storage device: EDLC supercap 400mF
 
 Documentation
