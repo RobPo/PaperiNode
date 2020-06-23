@@ -1,4 +1,4 @@
-PaperiNode - Self-powered E-Paper Node for LoRaWAN
+PaperiNode - Selfpowered E-Paper Node for LoRaWAN
 ===============================================================
 
 Welcome to the docs! This is an Arduino Library for PaperiNode, a TTN-connected 1.1” E-Paper Node which is powered by ambient light and thus energy-autark. 
