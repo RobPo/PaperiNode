@@ -1,4 +1,4 @@
-PaperiNode Arduino Library
+PaperiNode - E-Paper Node for LoRaWAN
 ===============================================================
 
 Welcome to the docs! This is an Arduino Library for PaperiNode, a TTN-connected 1.1” E-Paper Node which is powered by ambient light and thus energy-autark. 
@@ -6,6 +6,16 @@ Welcome to the docs! This is an Arduino Library for PaperiNode, a TTN-connected 
 
 ![paperinodes](https://user-images.githubusercontent.com/21104467/85375650-e7339400-b536-11ea-92e2-3397753d8f9d.png)
 [*PaperiNode*](https://twitter.com/Paperino_io)
+
+Hardware specification:
+-----------------------
+- MCU: ATmega328pb(16MHz, 32KB FLASH, 2KB SRAM )
+- LoRa Chip: RFM95W, Antenna EU_863_870
+- Flash: Winbond W25X40Cl, 4Mbit
+- Low power design:	Deep Sleep 2.4uA
+- PV cells: IXYS SLMD121H04L
+- Energy-harvesting PMIC: E-Peas AEM10941 
+- Storage device: EDLC supercap 400mF
 
 Documentation
 --------------
