@@ -1,4 +1,4 @@
-PaperiNode - E-Paper Node for LoRaWAN
+PaperiNode - Self-powered E-Paper Node for LoRaWAN
 ===============================================================
 
 Welcome to the docs! This is an Arduino Library for PaperiNode, a TTN-connected 1.1” E-Paper Node which is powered by ambient light and thus energy-autark. 
@@ -35,13 +35,13 @@ Please download and start the latest Arduino IDE. Select "Pololu A-star 328pb, 5
 
 ### Hardware hookup
 
-Connect your FTTI programmer to LoraPaper through the pins exposed on the bottom side; either directly (left) or through a breadboard and with soldered pin row (right):
+Connect your FTTI programmer to PaperiNode through the pins exposed on the bottom side; either directly (left) or through a breadboard and with soldered pin row (right):
 ![ftdi2](https://user-images.githubusercontent.com/21104467/71321525-9de88600-24ba-11ea-95f3-0afbbc627986.jpg)
 
 
 Examples
 -------------------
-These demo projects are for your inspiration! What will you implement with LoraPaper? Tell us, we’ll love to add your project here!
+These demo projects are for your inspiration! What will you implement with PaperiNode? Tell us, we’ll love to add your project here!
 
 ![weatherforecast](https://user-images.githubusercontent.com/21104467/71322107-f3756080-24c3-11ea-96c5-fdd6a71fff85.jpg)
 
