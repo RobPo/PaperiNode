@@ -4,7 +4,7 @@ PaperiNode Arduino Library
 Welcome to the docs! This is an Arduino Library for PaperiNode, a TTN-connected 1.1” E-Paper Node which is powered by ambient light and thus energy-autark. 
 
 
-![paperinodes](https://user-images.githubusercontent.com/21104467/85375274-59f03f80-b536-11ea-868a-cd1b9014b28f.png)
+![paperinodes](https://user-images.githubusercontent.com/21104467/85375650-e7339400-b536-11ea-92e2-3397753d8f9d.png)
 [*PaperiNode*](https://twitter.com/Paperino_io)
 
 Documentation
