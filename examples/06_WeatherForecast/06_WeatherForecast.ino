@@ -36,7 +36,7 @@ LORAMAC lorawan (&lora);      // Initialize the LoRaWAN stack.
 CayenneLPP LPP(&(lora.TX));   // Initialize the Low Power Protocol functions
 PL_microEPD epd(EPD_CS, EPD_RST, EPD_BUSY);    //Initialize the EPD.
 
-volatile bool RTC_ALARM = false;      // Interrupt variable
+volatile bool RTC_ALARM = true;      // Interrupt variable
 uint16_t v_scap, ndr, sync_max = 10;  // V_Supercap, counter of failed downloads & max_syncs
 
 /********* INTERRUPTS *********************************************************************/
@@ -110,15 +110,19 @@ void loop(){
             epd.begin(false);             // Turn ON EPD without refresh to save power
             lorawan.init();               // Init the RFM95 module
 
-            //if (app.Counter< sync_max) {  // Limit to 10 syncs to fullfill TTNs daily download limit
+            if (app.Counter< sync_max) {  // Limit to 10 syncs to fullfill TTNs daily download limit
                 lora.RX.Data[6] = 25;     // Dummy value to check lateron if downlink data was received
                 lorawan.LORA_send_and_receive();
-            //}
+            }
+
+            if (app.Counter>=1)           // Change wakeup from minutely to every 2hours
+                app.LoRaWAN_message_interval=120;
                        
             if (lora.RX.Data[6] == 25)    // Downlink data received?
                 ndr++;                    // if not increase nodatareceived (ndr) counter
-                
-             epd.printText("Current Weather ", 1, 2, 1);         // Header line
+
+            
+            epd.printText("Current Weather ", 1, 2, 1);         // Header line
 
         String leadingHour = "";
         if(lora.RX.Data[3] < 10) {
