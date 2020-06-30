@@ -7,7 +7,7 @@ Welcome to the docs! This is an Arduino Library for PaperiNode, a TTN-connected 
 ![paperinodes](https://user-images.githubusercontent.com/21104467/85378463-e13fb200-b53a-11ea-95d8-0eedb5c36a9c.png)
 [*PaperiNode*](https://twitter.com/Paperino_io)
 
-Hardware specification (**[Datasheets://github.com/RobPo/paperinode/tree/master/datasheets)**):
+Hardware specification (**[Datasheets](https://github.com/RobPo/paperinode/tree/master/datasheets)**):
 -----------------------
 - MCU: ATmega328pb (16MHz, 32KB FLASH, 2KB SRAM)
 - External RTC: MCP7940M
@@ -19,14 +19,6 @@ Hardware specification (**[Datasheets://github.com/RobPo/paperinode/tree/master/
 - Energy-harvesting PMIC: E-Peas AEM10941 w/ MPPT
 - Storage device: EDLC supercap 400mF
 
-Documentation
---------------
-This is the place to get started! We have divided the documentation into the following sections:
-
-
-* **[Examples](https://github.com/RobPo/lorapaper/tree/master/examples)** - Ready to use examples for your own inspiration.
-* **[Reference](https://github.com/RobPo/lorapaper/tree/master/datasheets)** - Datasheets.
-* **[Hardware](https://github.com/RobPo/lorapaper/tree/master/schematics)** - Schematic.
 
 How To Use
 -------------------
@@ -43,7 +35,7 @@ Connect your FTTI programmer to PaperiNode through the pins exposed on the botto
 
 Examples
 -------------------
-This is the place to get started! Ready to use examples can be found **[here](https://github.com/RobPo/paperinode/tree/master/examples)**
+This is the place to get started! Ready to use examples can be found **[here](https://github.com/RobPo/paperinode/tree/master/examples)** .
 
 These demo projects are for your inspiration! What will you implement with PaperiNode? Tell us, we’ll love to add your project here!
 
