@@ -35,9 +35,9 @@ Connect your FTTI programmer to PaperiNode through the pins exposed on the botto
 
 Examples
 -------------------
-This is the place to get started! Ready to use examples can be found **[here](https://github.com/RobPo/paperinode/tree/master/examples)** .
+This is the place to get started! Ready to use examples can be found **[here](https://github.com/RobPo/paperinode/tree/master/examples)**.
 
-These demo projects are for your inspiration! What will you implement with PaperiNode? Tell us, we’ll love to add your project here!
+Following demo projects are for your inspiration! What will you implement with PaperiNode? Tell us, we’ll love to add your project here!
 
 ![weatherforecast](https://user-images.githubusercontent.com/21104467/71322107-f3756080-24c3-11ea-96c5-fdd6a71fff85.jpg)
 
@@ -48,7 +48,7 @@ This library is **open source**!
 
 Libraries used in this sketch are based on the LoRaWAN stack from IDEETRON/NEXUS, for more infos please check this great source: https://github.com/Ideetron/Nexus-Low-Power
 
-Libraries used in this sketch around the ePaper and the Example sketches are created by Robert Poser, Dez 19th 2019, Dresden/Germany. 
+Libraries used in this sketch around the ePaper and the Example sketches are created by Robert Poser, Jun 20th 2020, Dresden/Germany. 
 
 Released under GNU Lesser General Public License, either version 3 of the License, or (at your option) any later version, check license.md for more information.
 
