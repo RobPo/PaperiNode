@@ -33,10 +33,22 @@ To program PaperiNode you will need to connect a FTDI programmer (USB to Serial,
 ![Programming the device](https://user-images.githubusercontent.com/21104467/87086258-9eb3f000-c231-11ea-9206-a208e11fee20.png)
 
 
-Examples
--------------------
-This is the place to get started! Ready to use examples can be found **[here](https://github.com/RobPo/paperinode/tree/master/examples)**.
+### Examples
 
+Now its time to get started! Ready to use examples can be found **[here](https://github.com/RobPo/paperinode/tree/master/examples)**.
+
+- 01_SerialPrintDevEUI > Prints the individual Device EUI address to the serial console. 
+- 02_Hello World > Shows the first text on the epd screen.
+- 03_SaveImgToFlash > Shows how to store upto 7 pictures on the flash memory.
+- 04_MeasVScap > Example which prints the measured voltage of the supercap storage device on the epd screen.
+- 05_Minimal > Demonstrates a simple counter, being updated everytime if there is sufficient energy harvested. The supercap voltage v_scap is measured minutely while the ATmega328pb processor is in deep sleep all remaining time. Triggering is done via external RTC to minimize current consumption during deep sleep phase. IF the voltage is charged above a certain limit (ie 4.2V), an image update is triggered. 
+
+06_WeatherForecast
+-------------------
+Adds a LoRa up- and downlink on top of the previous template; the received payload is then shown on the screen.
+
+Projects
+-------------------
 Following demo projects are for your inspiration! What will you implement with PaperiNode? Tell us, we’ll love to add your project here!
 
 ![weatherforecast](https://user-images.githubusercontent.com/21104467/71322107-f3756080-24c3-11ea-96c5-fdd6a71fff85.jpg)
