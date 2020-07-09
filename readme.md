@@ -29,8 +29,8 @@ Please download and start the latest Arduino IDE. Select "Pololu A-star 328pb, 5
 
 ### Hardware hookup
 
-Connect your FTTI programmer to PaperiNode through the pins exposed on the bottom side; either directly (left) or through a breadboard and with soldered pin row (right):
-![ftdi2](https://user-images.githubusercontent.com/21104467/71321525-9de88600-24ba-11ea-95f3-0afbbc627986.jpg)
+To program PaperiNode you will need to connect a FTDI programmer (USB to Serial, available for ~3€ e.g. at eBay) to the exposed pins on the bottom side. The most reliable version is to solder a pin row and connect everything on a breadboard. Alternatively, its possible to connect the programmer  directly to the bottom pins (if needed in combination with a slight pressure) or to 3D-print your own pogo-pin based clamp (see below):
+![Programming the device](https://user-images.githubusercontent.com/21104467/87086258-9eb3f000-c231-11ea-9206-a208e11fee20.png)
 
 
 Examples
