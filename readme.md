@@ -35,7 +35,7 @@ To program PaperiNode you will need to connect a FTDI programmer (USB to Serial,
 
 ### Examples
 
-Now its time to get started! Ready to use examples can be found **[here](https://github.com/RobPo/paperinode/tree/master/examples)**.
+Now its time to get started! Ready to use examples can be found **[here](https://github.com/RobPo/paperinode/tree/master/examples)**:
 
 - 01_SerialPrintDevEUI > Prints the individual Device EUI address to the serial console. 
 - 02_Hello World 	   > Shows the first text on the epd screen.
@@ -50,6 +50,11 @@ Following demo projects are for your inspiration! What will you implement with P
 
 ![weatherforecast](https://user-images.githubusercontent.com/21104467/71322107-f3756080-24c3-11ea-96c5-fdd6a71fff85.jpg)
 
+Where To Get
+-------------------
+PaperiNode is available at ![Tindie]https://www.tindie.com/products/robertposer/paperinode-solarpowered-e-paper-node-for-lorawan/
+![image](https://user-images.githubusercontent.com/21104467/87087892-2e5a9e00-c234-11ea-817c-b1f2ac832ec2.png)
+
 License Information
 -------------------
 
@@ -61,7 +66,7 @@ Libraries used in this sketch around the ePaper and the Example sketches are cre
 
 Released under GNU Lesser General Public License, either version 3 of the License, or (at your option) any later version, check license.md for more information.
 
-We invested time and resources providing this source code, please support open source hardware and software @Ideetron, @Adafruit, @Watterott and others.
+We invested time and resources providing this source code, please support open source hardware and software @Ideetron, @Adafruit, @Watterott, @Tindie and others.
 
 If you like this project please [follow us on Twitter](https://twitter.com/paperino_io).
 Having problems or have awesome suggestions? Contact us: paperino.display@gmail.com.
