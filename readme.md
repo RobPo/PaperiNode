@@ -19,6 +19,14 @@ Hardware specification (**[Datasheets](https://github.com/RobPo/paperinode/tree/
 - Energy-harvesting PMIC: E-Peas AEM10941 w/ MPPT
 - Storage device: EDLC supercap 400mF
 
+### Revisions
+
+This second revision (black FPC) is the successor of the first edition (white FPC) and contains the following improvements:
+- Reduced deep sleep current
+- SPI pins exposed on bottom side to connect external sensors etc.
+- SPI flash added to store measurement data or upto seven pictures
+![image](https://user-images.githubusercontent.com/21104467/87089413-b3df4d80-c236-11ea-80cd-ae3580d8e8bf.png)
+
 
 How To Use
 -------------------
@@ -52,7 +60,7 @@ Following demo projects are for your inspiration! What will you implement with P
 
 Where To Get
 -------------------
-PaperiNode is available at [Tindie](https://www.tindie.com/products/robertposer/paperinode-solarpowered-e-paper-node-for-lorawan/)
+PaperiNode is available at [tindie](https://www.tindie.com/products/robertposer/paperinode-solarpowered-e-paper-node-for-lorawan/)
 ![image](https://user-images.githubusercontent.com/21104467/87087892-2e5a9e00-c234-11ea-817c-b1f2ac832ec2.png)
 
 License Information
