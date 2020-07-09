@@ -52,7 +52,7 @@ Following demo projects are for your inspiration! What will you implement with P
 
 Where To Get
 -------------------
-PaperiNode is available at ![Tindie]https://www.tindie.com/products/robertposer/paperinode-solarpowered-e-paper-node-for-lorawan/
+PaperiNode is available at ![Tindie](https://www.tindie.com/products/robertposer/paperinode-solarpowered-e-paper-node-for-lorawan/)
 ![image](https://user-images.githubusercontent.com/21104467/87087892-2e5a9e00-c234-11ea-817c-b1f2ac832ec2.png)
 
 License Information
