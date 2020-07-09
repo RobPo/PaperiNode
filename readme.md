@@ -42,10 +42,7 @@ Now its time to get started! Ready to use examples can be found **[here](https:/
 - 03_SaveImgToFlash    > Shows how to store upto seven pictures in the flash memory.
 - 04_MeasVScap 		   > Example which prints the measured voltage of the supercap storage device on the epd screen.
 - 05_Minimal 		   > Demonstrates a simple counter, being updated everytime if there is sufficient energy harvested. The supercap voltage v_scap is measured minutely while the ATmega328pb processor is in deep sleep all remaining time. Triggering is done via external RTC to minimize current consumption during deep sleep phase. IF the voltage is charged above a certain limit (ie 4.2V), an image update is triggered. 
-
-06_WeatherForecast
--------------------
-Adds a LoRa up- and downlink on top of the previous template; the received payload is then shown on the screen.
+- 06_WeatherForecast   > Based on the previous demo,  a LoRa up- and downlink is added; the received payload is then shown on the screen.
 
 Projects
 -------------------
