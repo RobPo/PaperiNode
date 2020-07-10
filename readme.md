@@ -21,7 +21,7 @@ Hardware specification (**[Datasheets](https://github.com/RobPo/paperinode/tree/
 
 ### Revisions
 
-![image](https://user-images.githubusercontent.com/21104467/87089413-b3df4d80-c236-11ea-80cd-ae3580d8e8bf.png)
+![image](https://user-images.githubusercontent.com/21104467/87089413-b3df4d80-c236-11ea-80cd-ae3580d8e8bf.png)  
 The second revision (black FPC) is the successor of the first edition (white FPC) and contains the following changes:
 - Reduced deep sleep current
 - SPI pins exposed on bottom side to connect external sensors etc.
