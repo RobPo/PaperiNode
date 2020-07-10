@@ -51,6 +51,11 @@ Now its time to get started! Ready to use examples can be found **[here](https:/
 - 05_Minimal 		   > Demonstrates a simple counter, being updated everytime if there is sufficient energy harvested. The supercap voltage v_scap is measured minutely while the ATmega328pb processor is in deep sleep all remaining time. Triggering is done via external RTC to minimize current consumption during deep sleep phase. IF the voltage is charged above a certain limit (ie 4.2V), an image update is triggered. 
 - 06_WeatherForecast   > Based on the previous demo,  a LoRa up- and downlink is added; the received payload is then shown on the screen.
 
+Power consumption
+-------------------
+![image](https://user-images.githubusercontent.com/21104467/87191015-dd11e380-c2f3-11ea-8748-3fb30a526311.png)
+For this example the used energy is 0,7Joule (based on ABP with SF7 and 18byte payload within downlink). 
+
 Projects
 -------------------
 Following demo projects are for your inspiration! What will you implement with PaperiNode? Tell us, we’ll love to add your project here!
