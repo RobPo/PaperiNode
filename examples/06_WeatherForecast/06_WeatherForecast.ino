@@ -36,8 +36,8 @@ LORAMAC lorawan (&lora);      // Initialize the LoRaWAN stack.
 CayenneLPP LPP(&(lora.TX));   // Initialize the Low Power Protocol functions
 PL_microEPD epd(EPD_CS, EPD_RST, EPD_BUSY);    //Initialize the EPD.
 
-volatile bool RTC_ALARM = true;      // Interrupt variable
-uint16_t v_scap, ndr, sync_max = 10;  // V_Supercap, counter of failed downloads & max_syncs
+volatile bool RTC_ALARM = false;         // Interrupt variable
+uint16_t v_scap, ndr, sync_max = 10, d; // V_Supercap, counter of failed downloads & max_syncs
 
 /********* INTERRUPTS *********************************************************************/
 ISR(INT1_vect) {                // Interrupt vector for the alarm of the MCP7940 Real Time 
@@ -85,6 +85,7 @@ void setup(void) {
   v_scap = analogRead(A7);            // 1st Dummy-read which always delivers strange values...(to skip)
   
   mcp7940_init(&TimeDate, app.LoRaWAN_message_interval);   // Generate minutely interrupt 
+  RTC_ALARM = true;
 }
 
 void loop(){ 
@@ -100,94 +101,90 @@ void loop(){
         digitalWrite(SW_TFT, HIGH);    // Turn OFF voltage divider 
   
         if (v_scap >= 640) {           // Proceed only if (Vscap > 4,2V)--> DEFAULT!
+          if (++app.Counter%2) {       // Every two hours... 
+            if (app.Counter>=4)        // Change wakeup from minutely to every 2hours
+                app.LoRaWAN_message_interval=58;
+   
             LPP.clearBuffer();         // Form a payload according to the LPP standard to 
             LPP.addDigitalOutput(0x00, app.Counter);
             LPP.addAnalogInput(0x00, v_scap*3.3/1023*4);
-            app.Counter += 1;          // Increase app.Counter
 
             SPI.begin();
             SPI.beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE0));
             epd.begin(false);             // Turn ON EPD without refresh to save power
             lorawan.init();               // Init the RFM95 module
 
-            if (app.Counter< sync_max) {  // Limit to 10 syncs to fullfill TTNs daily download limit
-                lora.RX.Data[6] = 25;     // Dummy value to check lateron if downlink data was received
-                lorawan.LORA_send_and_receive();
-            }
-
-            if (app.Counter>=1)           // Change wakeup from minutely to every 2hours
-                app.LoRaWAN_message_interval=120;
-                       
+            lora.RX.Data[6] = 25;         // Dummy value to check lateron if downlink data was received
+            lorawan.LORA_send_and_receive();  // LoRaWAN send_and_receive
             if (lora.RX.Data[6] == 25)    // Downlink data received?
-                ndr++;                    // if not increase nodatareceived (ndr) counter
-
+                ndr++;                    // if not increase nodatareceived (ndr) counter                      
             
             epd.printText("Current Weather ", 1, 2, 1);         // Header line
 
-        String leadingHour = "";
-        if(lora.RX.Data[3] < 10) {
-          leadingHour = " ";
-        }
-        String leadingMinute = "";
-        if(lora.RX.Data[4] < 10) {
-          leadingMinute = "0";
-        }
-        epd.printText(leadingHour + String(lora.RX.Data[3]) + ":" + leadingMinute + String(lora.RX.Data[4]), 110, 2, 1);
-
-        String leadingTemp = "";
-        if(int8_t(lora.RX.Data[0]) > -1 && int8_t(lora.RX.Data[0]) < 10) {
-          leadingTemp = " ";
-        }
-        epd.printText(leadingTemp + String(int8_t(lora.RX.Data[0])), 11, 16, 3);  // Temperature
-        epd.printText("o", 53, 12, 2);
-        epd.printText("C", 65, 16, 3);
-
-        String leadingHumi = "";
-        if(int8_t(lora.RX.Data[1]) < 10) {
-          leadingHumi = " ";
-        }
-        epd.printText(leadingHumi + String(uint8_t(lora.RX.Data[1])), 11, 44, 3);  // Humidity
-        epd.printText("%", 65, 44, 3);
-
-        //epd.drawBitmapLM(87, 15, wIcon_sunny, 24, 24);      // Just to demonstrate how to write little
-                                                            // icons; here it will always be the same 
-                                                            // independent of the weather forecast :-)
-
-        epd.fillRectLM(87 , 41, 4, 1, EPD_BLACK);
-        epd.fillRectLM(92 , 41, 4, 1, EPD_BLACK);
-        epd.fillRectLM(97 , 41, 4, 1, EPD_BLACK);
-        epd.fillRectLM(102, 41, 4, 1, EPD_BLACK);
-        epd.fillRectLM(107, 41, 4, 1, EPD_BLACK);
-        uint8_t r1 = uint8_t(lora.RX.Data[7])  * 2;
-        uint8_t r2 = uint8_t(lora.RX.Data[8])  * 2;
-        uint8_t r3 = uint8_t(lora.RX.Data[9])  * 2;
-        uint8_t r4 = uint8_t(lora.RX.Data[10]) * 2;
-        uint8_t r5 = uint8_t(lora.RX.Data[11]) * 2;
-        if(r1 > 20)
-          r1 = 20;
-        if(r2 > 20)
-          r2 = 20;
-        if(r3 > 20)
-          r3 = 20;
-        if(r4 > 20)
-          r4 = 20;
-        if(r5 > 20)
-          r5 = 20;
-        epd.fillRectLM(87 , 39, 4, r1, EPD_BLACK);
-        epd.fillRectLM(92 , 39, 4, r2, EPD_BLACK);
-        epd.fillRectLM(97 , 39, 4, r3, EPD_BLACK);
-        epd.fillRectLM(102, 39, 4, r4, EPD_BLACK);
-        epd.fillRectLM(107, 39, 4, r5, EPD_BLACK);
-            
-        epd.printText("V " + String(v_scap*3.3/1023*2), 115, 20, 1); // Plot last known voltage
-        epd.printText("U " + String(app.Counter)      , 115, 30, 1); // Plot how many syncs have been tried
-        epd.printText("D " + String(app.Counter - ndr), 115, 40, 1); // Plot how many downlinks were empty
-   
-             epd.update();                                        // Send the framebuffer and do the update
-             epd.end();                                           // To save power...
-             digitalWrite(RFM_NSS, LOW);                          // To save power...
-             SPI.endTransaction();                                // To save power...
-             SPI.end();                                           // To save power...
+            String leadingHour = "";
+            if(lora.RX.Data[3] < 10) {
+              leadingHour = " ";
+            }
+            String leadingMinute = "";
+            if(lora.RX.Data[4] < 10) {
+              leadingMinute = "0";
+            }
+            epd.printText(leadingHour + String(lora.RX.Data[3]) + ":" + leadingMinute + String(lora.RX.Data[4]), 110, 2, 1);
+    
+            String leadingTemp = "";
+            if(int8_t(lora.RX.Data[0]) > -1 && int8_t(lora.RX.Data[0]) < 10) {
+              leadingTemp = " ";
+            }
+            epd.printText(leadingTemp + String(int8_t(lora.RX.Data[0])), 11, 16, 3);  // Temperature
+            epd.printText("o", 53, 12, 2);
+            epd.printText("C", 65, 16, 3);
+    
+            String leadingHumi = "";
+            if(int8_t(lora.RX.Data[1]) < 10) {
+              leadingHumi = " ";
+            }
+            epd.printText(leadingHumi + String(uint8_t(lora.RX.Data[1])), 11, 44, 3);  // Humidity
+            epd.printText("%", 65, 44, 3);
+    
+            //epd.drawBitmapLM(87, 15, wIcon_sunny, 24, 24);      // Just to demonstrate how to write little
+                                                                // icons; here it will always be the same 
+                                                                // independent of the weather forecast :-)
+            epd.fillRectLM(87 , 41, 4, 1, EPD_BLACK);
+            epd.fillRectLM(92 , 41, 4, 1, EPD_BLACK);
+            epd.fillRectLM(97 , 41, 4, 1, EPD_BLACK);
+            epd.fillRectLM(102, 41, 4, 1, EPD_BLACK);
+            epd.fillRectLM(107, 41, 4, 1, EPD_BLACK);
+            uint8_t r1 = uint8_t(lora.RX.Data[7])  * 2;
+            uint8_t r2 = uint8_t(lora.RX.Data[8])  * 2;
+            uint8_t r3 = uint8_t(lora.RX.Data[9])  * 2;
+            uint8_t r4 = uint8_t(lora.RX.Data[10]) * 2;
+            uint8_t r5 = uint8_t(lora.RX.Data[11]) * 2;
+            if(r1 > 20)
+              r1 = 20;
+            if(r2 > 20)
+              r2 = 20;
+            if(r3 > 20)
+              r3 = 20;
+            if(r4 > 20)
+              r4 = 20;
+            if(r5 > 20)
+              r5 = 20;
+            epd.fillRectLM(87 , 39, 4, r1, EPD_BLACK);
+            epd.fillRectLM(92 , 39, 4, r2, EPD_BLACK);
+            epd.fillRectLM(97 , 39, 4, r3, EPD_BLACK);
+            epd.fillRectLM(102, 39, 4, r4, EPD_BLACK);
+            epd.fillRectLM(107, 39, 4, r5, EPD_BLACK);
+                
+            epd.printText("V " + String(v_scap*3.3/1023*2, 1), 115, 20, 1); // Plot last known voltage
+            epd.printText("U " + String(app.Counter/2+1)      , 115, 30, 1); // Plot how many syncs have been tried
+            epd.printText("D " + String(app.Counter/2+1 - ndr), 115, 40, 1); // Plot how many downlinks were empty
+       
+            epd.update();                                        // Send the framebuffer and do the update
+            epd.end();                                           // To save power...
+            digitalWrite(RFM_NSS, LOW);                          // To save power...
+            SPI.endTransaction();                                // To save power...
+            SPI.end();                                           // To save power...
+          }
         }
       } else
         LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);      // To save power... 
