@@ -265,7 +265,7 @@
 			.frame_counter_up   = 0,
 			.Receive_delay		= RECEIVE_DELAY2,
 			.Transmit_Power     = 0x0F,
-			.TxChDr = {SF07_BW125kHz, CH00_868_100},
+			.TxChDr = {SF09_BW125kHz, CH00_868_100},
 			.RxChDr = {SF09_BW125kHz, CH10_869_525}
 		};
 
