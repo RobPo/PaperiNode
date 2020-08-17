@@ -1,6 +1,6 @@
 01_SerialPrintDevEUI
 -------------------
-Prints the individual Device EUI address to the serial console. 
+Prints the individual Device EUI address to the serial console (9.600baud). 
 
 02_Hello World
 -------------------
