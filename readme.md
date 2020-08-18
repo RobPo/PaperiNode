@@ -44,13 +44,13 @@ To program PaperiNode you will need to connect a FTDI programmer (USB to Serial,
 Based on Adafruit GFX library this version enables the easy usage of the 1.1" EPD in combination with the MCU. Most work was done around coping with the limited available SRAM size. The following commands are available:
 
 ```C++
-void begin();										// Initializes and clears the screen
-void clear();										// Clears the framebuffer	
+void begin();                                       // Initializes and clears the screen
+void clear();                                       // Clears the framebuffer	
 void printText(String text, int x, int y, int s);	// Write text to a defined position
 void loadFromFlash(int address=ADDR_FRAMEBUFFER, bool toPreviousBuffer=true);		// Loads a previously stored pic from SPI flash
-void fillRectLM(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);											// Draws a filled rectangle
-void update(int updateMode=EPD_UPD_FULL);			// Trigger an update with the framebuffer content
-void end(void);										// De-init the screen to save power
+void fillRectLM(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);                                             // Draws a filled rectangle
+void update(int updateMode=EPD_UPD_FULL);           // Trigger an update with the framebuffer content
+void end(void);                                     // De-init the screen to save power
 
 ```
 
