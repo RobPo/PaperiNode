@@ -46,17 +46,28 @@ Based on Adafruit GFX library this version enables the easy usage of the 1.1" EP
 ```C++
 void begin();                                       // Initializes and clears the screen
 void clear();                                       // Clears the framebuffer	
-void printText(String text, int x, int y, int s);   // Write text to a defined position
+void printText(String text, int x, int y, int s);   // Write text to a defined position with size s
 void loadFromFlash(int address=ADDR_FRAMEBUFFER, bool toPreviousBuffer=true);		// Loads a previously stored pic from SPI flash
-void fillRectLM(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);                                             // Draws a filled rectangle
+void fillRectLM(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);           // Draws a filled rectangle
 void update(int updateMode=EPD_UPD_FULL);           // Trigger an update with the framebuffer content
 void end(void);                                     // De-init the screen to save power
-
 ```
 
+The screen supports four different greylevels:
 
+```C++
+#define EPD_BLACK 0x00
+#define EPD_DGRAY 0x01
+#define EPD_LGRAY 0x02
+#define EPD_WHITE 0x03
+```
 
-
+The following update modes are available:
+```C++
+#define EPD_UPD_FULL  0x00            // Triggers a Full update, 4 GL, 800ms
+#define EPD_UPD_PART  0x01            // Triggers a Partial update, 4 GL, 800ms
+#define EPD_UPD_MONO  0x02            // Triggers a Partial Mono update, 2 GL, 250ms
+```
 ### Examples
 
 Now its time to get started! Ready to use examples can be found **[here](https://github.com/RobPo/paperinode/tree/master/examples)**:
