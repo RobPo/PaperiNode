@@ -39,6 +39,23 @@ Please download and start the latest Arduino IDE. Select "Pololu A-star 328pb, 5
 To program PaperiNode you will need to connect a FTDI programmer (USB to Serial, available for ~3€ e.g. at eBay) to the exposed pins on the bottom side. The most reliable version is to solder a pin row and connect everything on a breadboard. Alternatively, its possible to connect the programmer  directly to the bottom pins (if needed in combination with a slight pressure) or to 3D-print your own pogo-pin based clamp (see below):
 ![Programming the device](https://user-images.githubusercontent.com/21104467/87086258-9eb3f000-c231-11ea-9206-a208e11fee20.png)
 
+### E-Ink display library
+
+Based on Adafruit GFX library this version enables the easy usage of the 1.1" EPD in combination with the MCU. Most work was done around coping with the limited available SRAM size. The following commands are available:
+
+```C++
+void begin(bool erase=true);
+void clear(int c=EPD_WHITE);
+void printText(String text, int x, int y, int s);
+void loadFromFlash(int address=ADDR_FRAMEBUFFER, bool toPreviousBuffer=true);
+void fillRectLM(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+void update(int updateMode=EPD_UPD_FULL);
+void end(void);
+
+```
+
+
+
 
 ### Examples
 
