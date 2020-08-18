@@ -56,10 +56,10 @@ void end(void);                                     // De-init the screen to sav
 The screen supports four different greylevels:
 
 ```C++
-#define EPD_BLACK 0x00
-#define EPD_DGRAY 0x01
-#define EPD_LGRAY 0x02
-#define EPD_WHITE 0x03
+#define EPD_BLACK 0x00            // A black almost as dark as the night
+#define EPD_DGRAY 0x01            // A darker gray
+#define EPD_LGRAY 0x02            // A lighter gray
+#define EPD_WHITE 0x03            // A white as bright as snow
 ```
 
 The following update modes are available:
