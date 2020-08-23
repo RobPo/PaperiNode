@@ -145,20 +145,48 @@ void loop(){
             }
             epd.printText(leadingHumi + String(uint8_t(lora.RX.Data[1])), 11, 44, 3);  // Humidity
             epd.printText("%", 65, 44, 3);
-    
-            //epd.drawBitmapLM(87, 15, wIcon_sunny, 24, 24);      // Just to demonstrate how to write little
-                                                                // icons; here it will always be the same 
-                                                                // independent of the weather forecast :-)
+
+            uint8_t icon = uint8_t(lora.RX.Data[5]); // Hotti Weather Forecast Icons
+            switch (icon) {
+              case 1:
+                epd.drawBitmapLM(87, 15, wIcon_01, 24, 24);
+                break;
+              case 2:
+                epd.drawBitmapLM(87, 15, wIcon_02, 24, 24);
+                break;
+              case 3:
+                epd.drawBitmapLM(87, 15, wIcon_03, 24, 24);
+                break;
+              case 4:
+                epd.drawBitmapLM(87, 15, wIcon_04, 24, 24);
+                break;
+              case 9:
+                epd.drawBitmapLM(87, 15, wIcon_05, 24, 24);
+                break;
+              case 10:
+                epd.drawBitmapLM(87, 15, wIcon_06, 24, 24);
+                break;
+              case 11:
+                epd.drawBitmapLM(87, 15, wIcon_07, 24, 24);
+                break;
+              case 13:
+                epd.drawBitmapLM(87, 15, wIcon_08, 24, 24);
+                break;
+              case 50:
+                epd.drawBitmapLM(87, 15, wIcon_09, 24, 24);
+                break;
+            }
+            
             epd.fillRectLM(87 , 41, 4, 1, EPD_BLACK);
             epd.fillRectLM(92 , 41, 4, 1, EPD_BLACK);
             epd.fillRectLM(97 , 41, 4, 1, EPD_BLACK);
             epd.fillRectLM(102, 41, 4, 1, EPD_BLACK);
             epd.fillRectLM(107, 41, 4, 1, EPD_BLACK);
-            uint8_t r1 = uint8_t(lora.RX.Data[7])  * 2;
-            uint8_t r2 = uint8_t(lora.RX.Data[8])  * 2;
-            uint8_t r3 = uint8_t(lora.RX.Data[9])  * 2;
-            uint8_t r4 = uint8_t(lora.RX.Data[10]) * 2;
-            uint8_t r5 = uint8_t(lora.RX.Data[11]) * 2;
+            uint8_t r1 = uint8_t(lora.RX.Data[7])  / 5;
+            uint8_t r2 = uint8_t(lora.RX.Data[8])  / 5;
+            uint8_t r3 = uint8_t(lora.RX.Data[9])  / 5;
+            uint8_t r4 = uint8_t(lora.RX.Data[10]) / 5;
+            uint8_t r5 = uint8_t(lora.RX.Data[11]) / 5;
             if(r1 > 20)
               r1 = 20;
             if(r2 > 20)
@@ -169,6 +197,7 @@ void loop(){
               r4 = 20;
             if(r5 > 20)
               r5 = 20;
+           
             epd.fillRectLM(87 , 39, 4, r1, EPD_BLACK);
             epd.fillRectLM(92 , 39, 4, r2, EPD_BLACK);
             epd.fillRectLM(97 , 39, 4, r3, EPD_BLACK);
