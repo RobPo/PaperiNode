@@ -15,14 +15,14 @@ PL_microEPD epd(EPD_CS, EPD_RST, EPD_BUSY);    //Initialize the EPD.
 void setup(void) {  
   analogReference(EXTERNAL);          // use AREF for reference voltage
   SPI.begin();                        // Initialize the SPI port
-  SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
+  SPI.beginTransaction(SPISettings(6000000, MSBFIRST, SPI_MODE0));
 
   pinMode(SPI_FLASH_CS,  OUTPUT);
   digitalWrite(SPI_FLASH_CS,  HIGH);
 
   epd.begin();                        // Turn ON & initialize 1.1" EPD
-  //epd.saveImgToFlash(ADDR_PIC2);      // Save an image define in progmem.h to external Flash
-  epd.loadFromFlash(ADDR_PIC2, 0);    // Load an image from external flash
+  epd.saveImgToFlash(ADDR_PIC1);      // Save an image define in progmem.h to external Flash
+  epd.loadFromFlash(ADDR_PIC1, 0);    // Load an image from external flash
   epd.update();                     
 }
 

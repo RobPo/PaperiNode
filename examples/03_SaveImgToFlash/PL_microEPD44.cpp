@@ -334,6 +334,7 @@ byte PL_microEPD::readRegister(char address){
 void PL_microEPD::WhiteErase() {
   clear(EPD_WHITE);
   update();
+  delay(1000);
   clear(EPD_BLACK);
   update();
   clear(EPD_WHITE);

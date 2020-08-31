@@ -36,8 +36,8 @@ LORAMAC lorawan (&lora);      // Initialize the LoRaWAN stack.
 CayenneLPP LPP(&(lora.TX));   // Initialize the Low Power Protocol functions
 PL_microEPD epd(EPD_CS, EPD_RST, EPD_BUSY);    //Initialize the EPD.
 
-volatile bool RTC_ALARM = false;         // Interrupt variable
-uint16_t v_scap, ndr, sync_max = 10, d; // V_Supercap, counter of failed downloads & max_syncs
+volatile bool RTC_ALARM = false;        // Interrupt variable
+uint16_t v_scap, ndr;    
 
 /********* INTERRUPTS *********************************************************************/
 ISR(INT1_vect) {                // Interrupt vector for the alarm of the MCP7940 Real Time 
@@ -54,44 +54,32 @@ void setup(void) {
   SPI.begin();                        // Initialize the SPI port
   SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
   
-  pinMode(7, INPUT);                 // To measure V_Scap
   pinMode(SW_TFT, OUTPUT);            // Switch for V_Scap
   pinMode(DS2401, OUTPUT);            // Authenticating IC DS2401p+
-  pinMode(RTC_MFP, INPUT);            // RTC MCP7940
-  pinMode(RFM_DIO0, INPUT);           // RFM95W DIO0
-  pinMode(RFM_DIO1, INPUT);           // RFM95W DIO1
-  pinMode(RFM_DIO5, INPUT);           // RFM95W DIO5
   pinMode(RFM_NSS, OUTPUT);           // RFM95W NSS = CS
-  pinMode(SPI_FLASH_CS, OUTPUT);
+  pinMode(SPI_FLASH_CS, OUTPUT);      // External SPI flash
   digitalWrite(DS2401, HIGH);         // to save power...
   digitalWrite(SW_TFT, HIGH);         // to save power...
   digitalWrite(SPI_FLASH_CS, HIGH);   // to save power...
 
-  PCMSK1 = 0;                         // Disable Pin change interrupts  
-  PCICR = 0;                          // Disable Pin Change Interrupts
-  delay(10);                          // Power on delay for the RFM module
-  I2C_init();                         // Initialize I2C pins
-  flash_power_down();                 // To save power...
-  sei();                              // Enable Global Interrupts 
- 
   epd.begin();                        // Turn ON & initialize 1.1" EPD
-  epd.printText("Syncing with TTN...", 16, 20, 1);
+  epd.loadFromFlash(ADDR_PIC1, 0);    // Load an image from external flash
   epd.update();                       // Update EPD
   epd.end();                          // to save power...
   digitalWrite(RFM_NSS, LOW);         // to save power...
+  flash_power_down();                 // To save power...
   SPI.endTransaction();               // to save power...
   SPI.end();                          // to save power...
+ 
+  I2C_init();                         // Initialize I2C pins
+  mcp7940_init(&TimeDate, app.LoRaWAN_message_interval);   // Generate minutely interrupt 
 
   v_scap = analogRead(A7);            // 1st Dummy-read which always delivers strange values...(to skip)
-  
-  mcp7940_init(&TimeDate, app.LoRaWAN_message_interval);   // Generate minutely interrupt 
   RTC_ALARM = true;
 }
 
 void loop(){ 
-    if(RTC_ALARM == true){             // Catch the minute alarm from the RTC. 
-        RTC_ALARM = false;             // Clear the boolean.
-        
+    if(RTC_ALARM == true){             // Catch the minute alarm from the RTC.       
         mcp7940_reset_minute_alarm(app.LoRaWAN_message_interval);        
         mcp7940_read_time_and_date(&TimeDate);    
           
@@ -102,24 +90,34 @@ void loop(){
   
         if (v_scap >= 640) {           // Proceed only if (Vscap > 4,2V)--> DEFAULT!
           if (++app.Counter%2) {       // Every two hours... 
-            if (app.Counter>=4)        // Change wakeup from minutely to every 2hours
-                app.LoRaWAN_message_interval=58;
+               app.LoRaWAN_message_interval=58;
    
             LPP.clearBuffer();         // Form a payload according to the LPP standard to 
             LPP.addDigitalOutput(0x00, app.Counter);
-            LPP.addAnalogInput(0x00, v_scap*3.3/1023*4);
+            LPP.addAnalogInput(0x00, v_scap*3.3/1023*2);
 
             SPI.begin();
             SPI.beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE0));
             epd.begin(false);             // Turn ON EPD without refresh to save power
             lorawan.init();               // Init the RFM95 module
 
+            delay(50);
             lora.RX.Data[6] = 25;         // Dummy value to check lateron if downlink data was received
             lorawan.LORA_send_and_receive();  // LoRaWAN send_and_receive
             if (lora.RX.Data[6] == 25)    // Downlink data received?
                 ndr++;                    // if not increase nodatareceived (ndr) counter                      
             
-            epd.printText("Current Weather ", 1, 2, 1);         // Header line
+            epd.printText("Weather ", 1, 2, 1);         // Header line
+
+            String leadingDay = "";
+            if (TimeDate.day < 10)
+              leadingDay = "0";
+
+            String leadingMonth = "";
+            if (TimeDate.month < 10)
+              leadingMonth = "0";
+              
+            epd.printText(leadingDay + String(TimeDate.day) + "." + leadingMonth + String(TimeDate.month)+ ".", 70, 2, 1);
 
             String leadingHour = "";
             if(lora.RX.Data[3] < 10) {
@@ -215,6 +213,7 @@ void loop(){
             SPI.end();                                           // To save power...
           }
         }
+        RTC_ALARM = false;             // Clear the boolean.
       } else
         LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);      // To save power... 
 }

@@ -63,7 +63,7 @@ void loop(){
         v_scap = analogRead(A7);       // Measure V_scap
         digitalWrite(SW_TFT, HIGH);    // Turn OFF voltage divider 
   
-        if (v_scap >= 0) {           // Proceed only if (Vscap > 4,4V (640))--> DEFAULT!         
+        if (v_scap >= 640) {           // Proceed only if (Vscap > 4,4V (640))--> DEFAULT!         
             SPI.begin();
             SPI.beginTransaction(SPISettings(6000000, MSBFIRST, SPI_MODE0));
             epd.begin(false);
