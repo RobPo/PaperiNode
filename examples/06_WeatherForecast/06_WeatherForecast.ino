@@ -98,6 +98,7 @@ void loop(){
 
             SPI.begin();
             SPI.beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE0));
+            //digitalWrite(RFM_NSS, HIGH);           
             epd.begin(false);             // Turn ON EPD without refresh to save power
             lorawan.init();               // Init the RFM95 module
 
@@ -110,14 +111,14 @@ void loop(){
             epd.printText("Weather ", 1, 2, 1);         // Header line
 
             String leadingDay = "";
-            if (TimeDate.day < 10)
+            if (lora.RX.Data[2] < 10)
               leadingDay = "0";
 
             String leadingMonth = "";
-            if (TimeDate.month < 10)
+            if (lora.RX.Data[17] < 10)
               leadingMonth = "0";
               
-            epd.printText(leadingDay + String(TimeDate.day) + "." + leadingMonth + String(TimeDate.month)+ ".", 70, 2, 1);
+            epd.printText(leadingDay + String(lora.RX.Data[2]) + "." + leadingMonth + String(lora.RX.Data[17])+ ".", 70, 2, 1);
 
             String leadingHour = "";
             if(lora.RX.Data[3] < 10) {
@@ -180,11 +181,11 @@ void loop(){
             epd.fillRectLM(97 , 41, 4, 1, EPD_BLACK);
             epd.fillRectLM(102, 41, 4, 1, EPD_BLACK);
             epd.fillRectLM(107, 41, 4, 1, EPD_BLACK);
-            uint8_t r1 = uint8_t(lora.RX.Data[7])  / 5;
-            uint8_t r2 = uint8_t(lora.RX.Data[8])  / 5;
-            uint8_t r3 = uint8_t(lora.RX.Data[9])  / 5;
-            uint8_t r4 = uint8_t(lora.RX.Data[10]) / 5;
-            uint8_t r5 = uint8_t(lora.RX.Data[11]) / 5;
+            uint8_t r1 = uint8_t(lora.RX.Data[6])  / 5;
+            uint8_t r2 = uint8_t(lora.RX.Data[7])  / 5;
+            uint8_t r3 = uint8_t(lora.RX.Data[8])  / 5;
+            uint8_t r4 = uint8_t(lora.RX.Data[9]) / 5;
+            uint8_t r5 = uint8_t(lora.RX.Data[10]) / 5;
             if(r1 > 20)
               r1 = 20;
             if(r2 > 20)
