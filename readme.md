@@ -4,7 +4,7 @@ Solar powered E-Paper Node for LoRaWAN
 Welcome to the docs! This is an Arduino Library for PaperiNode, a TTN-connected 1.1” E-Paper Node which is powered by ambient light and thus energy-autark. 
 
 
-![paperinodes](https://user-images.githubusercontent.com/21104467/85378463-e13fb200-b53a-11ea-95d8-0eedb5c36a9c.png)
+![paperinodes]!(https://user-images.githubusercontent.com/21104467/96490819-9e1ff200-1241-11eb-81b9-494e9ae1753f.jpg)
 [*PaperiNode*](https://twitter.com/Paperino_io)
 
 Hardware specification (**[Datasheets](https://github.com/RobPo/paperinode/tree/master/datasheets)**):
