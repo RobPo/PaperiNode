@@ -64,6 +64,7 @@ void PL_microEPD::begin(bool whiteErase) {
    if (whiteErase) 
        WhiteErase();                             //Start with a white refresh if TRUE
     clear();
+
 }
 
 // ************************************************************************************
@@ -148,7 +149,7 @@ void PL_microEPD::update(int updateMode) {
         case 2:
             writeRegister(EPD_DRIVERVOLTAGE, 0x25, 0xFF, -1, -1);       //Vgate=+17V/-25V, Vsource=+/-15V
             writeRegister(EPD_PROGRAMMTP, 0x02, -1, -1, -1);            //Use mono waveform
-            writeRegister(EPD_DISPLAYENGINE, 0x07, -1, -1, -1);         //Only changing pixels updated
+            writeRegister(EPD_DISPLAYENGINE, 0x03, -1, -1, -1);         //Only changing pixels updated
             break;
         case 3:
             writeRegister(EPD_DRIVERVOLTAGE, 0x25, 0xFF, -1, -1);       //Vgate=+15V/-20V, Vsource=+/-12V
@@ -341,10 +342,11 @@ void PL_microEPD::WhiteErase() {
 }
 
 void PL_microEPD::saveFBToFlash(int address) {
-  flash_eraseSector(0);
+  flash_eraseSector(address);
+  flash_eraseSector(address + 4096);
   writeRegister(EPD_WRITEPXRECTSET, 0, 69, 0, 147);
   writeRegister(EPD_PIXELACESSPOS, 0, 0, -1, -1);    
-  for (int i=0; i<15; i++) {
+  for (int i=0; i<18; i++) {
       digitalWrite(cs, LOW);
       SPI.transfer(0x11 | EPD_REGREAD);
       for (int j=0; j < sizeof(buffer); j++)     //144 bytes

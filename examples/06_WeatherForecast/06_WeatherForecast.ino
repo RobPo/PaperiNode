@@ -63,7 +63,8 @@ void setup(void) {
   digitalWrite(SPI_FLASH_CS, HIGH);   // to save power...
 
   epd.begin();                        // Turn ON & initialize 1.1" EPD
-  epd.loadFromFlash(ADDR_PIC1, 0);    // Load an image from external flash
+  epd.loadFromFlash(ADDR_PIC1, 0);    // Load an pic from external flash
+  epd.saveFBToFlash(ADDR_FRAMEBUFFER);// And save it to external framebuffer on flash
   epd.update();                       // Update EPD
   epd.end();                          // to save power...
   digitalWrite(RFM_NSS, LOW);         // to save power...
@@ -88,7 +89,7 @@ void loop(){
         v_scap = analogRead(A7);       // Measure V_scap
         digitalWrite(SW_TFT, HIGH);    // Turn OFF voltage divider 
   
-        if (v_scap >= 640) {           // Proceed only if (Vscap > 4,2V)--> DEFAULT!
+        if (v_scap >= 620) {           // Proceed only if (Vscap > 4,0V)--> DEFAULT for 1.5F!
           if (++app.Counter%2) {       // Every two hours... 
                app.LoRaWAN_message_interval=58;
    
@@ -98,7 +99,6 @@ void loop(){
 
             SPI.begin();
             SPI.beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE0));
-            //digitalWrite(RFM_NSS, HIGH);           
             epd.begin(false);             // Turn ON EPD without refresh to save power
             lorawan.init();               // Init the RFM95 module
 
@@ -107,7 +107,8 @@ void loop(){
             lorawan.LORA_send_and_receive();  // LoRaWAN send_and_receive
             if (lora.RX.Data[6] == 25)    // Downlink data received?
                 ndr++;                    // if not increase nodatareceived (ndr) counter                      
-            
+
+            epd.loadFromFlash(ADDR_FRAMEBUFFER);        // Load last image to pre-buffer
             epd.printText("Weather ", 1, 2, 1);         // Header line
 
             String leadingDay = "";
@@ -181,35 +182,30 @@ void loop(){
             epd.fillRectLM(97 , 41, 4, 1, EPD_BLACK);
             epd.fillRectLM(102, 41, 4, 1, EPD_BLACK);
             epd.fillRectLM(107, 41, 4, 1, EPD_BLACK);
-            uint8_t r1 = uint8_t(lora.RX.Data[6])  / 5;
-            uint8_t r2 = uint8_t(lora.RX.Data[7])  / 5;
-            uint8_t r3 = uint8_t(lora.RX.Data[8])  / 5;
+            uint8_t r1 = uint8_t(lora.RX.Data[6]) / 5;
+            uint8_t r2 = uint8_t(lora.RX.Data[7]) / 5;
+            uint8_t r3 = uint8_t(lora.RX.Data[8]) / 5;
             uint8_t r4 = uint8_t(lora.RX.Data[9]) / 5;
             uint8_t r5 = uint8_t(lora.RX.Data[10]) / 5;
-            if(r1 > 20)
-              r1 = 20;
-            if(r2 > 20)
-              r2 = 20;
-            if(r3 > 20)
-              r3 = 20;
-            if(r4 > 20)
-              r4 = 20;
-            if(r5 > 20)
-              r5 = 20;
-           
             epd.fillRectLM(87 , 39, 4, r1, EPD_BLACK);
             epd.fillRectLM(92 , 39, 4, r2, EPD_BLACK);
             epd.fillRectLM(97 , 39, 4, r3, EPD_BLACK);
             epd.fillRectLM(102, 39, 4, r4, EPD_BLACK);
             epd.fillRectLM(107, 39, 4, r5, EPD_BLACK);
-                
+
             epd.printText("V " + String(v_scap*3.3/1023*2, 1), 115, 20, 1); // Plot last known voltage
             epd.printText("U " + String(app.Counter/2+1)      , 115, 30, 1); // Plot how many syncs have been tried
             epd.printText("D " + String(app.Counter/2+1 - ndr), 115, 40, 1); // Plot how many downlinks were empty
-       
-            epd.update();                                        // Send the framebuffer and do the update
+
+            epd.saveFBToFlash(ADDR_FRAMEBUFFER);
+            if (v_scap > 640)
+              epd.update();                                     // Trigger a 900ms default update (4GL)
+            else
+              epd.update(EPD_UPD_MONO);                         // Trigger a 450ms low power update (2GL)
+
             epd.end();                                           // To save power...
             digitalWrite(RFM_NSS, LOW);                          // To save power...
+            flash_power_down();                                  // To save power...
             SPI.endTransaction();                                // To save power...
             SPI.end();                                           // To save power...
           }
