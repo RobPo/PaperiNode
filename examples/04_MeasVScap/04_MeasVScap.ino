@@ -25,7 +25,7 @@ void loop(){
     digitalWrite(SW_TFT, HIGH);    // Turn OFF voltage divider 
   
     epd.clear();
-    epd.printText(String(float(v_scap*3.3/1024)), 10, 20, 2);  // Following lines look a bit complex; due to 
+    epd.printText(String(float(v_scap*3.3/1023*2)), 10, 20, 2);  // Following lines look a bit complex; due to 
     epd.printText(String("V"), 60, 20, 2);  // Following lines look a bit complex; due to 
     epd.printText(String(v_scap), 10, 40, 2);  // Following lines look a bit complex; due to 
     epd.update();
