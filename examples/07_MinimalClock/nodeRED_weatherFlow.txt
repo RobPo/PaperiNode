@@ -1,0 +1,110 @@
+[
+    {
+        "id": "16ce80f1.a17f3f",
+        "type": "ttn downlink",
+        "z": "6844a090.464c2",
+        "name": "",
+        "app": "9eb5de23.3697f",
+        "dev_id": "ADDYOURDEVICENAMEHERE",
+        "port": "1",
+        "confirmed": false,
+        "schedule": "replace",
+        "x": 691,
+        "y": 72,
+        "wires": []
+    },
+    {
+        "id": "59a6efe8.9194d",
+        "type": "http request",
+        "z": "6844a090.464c2",
+        "name": "weather API",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "https://api.openweathermap.org/data/2.5/onecall?lat=48.15146907&lon=11.52760662&appid=YOUR_API_KEY_HERE&exclude=minutely,flags,alerts&units=metric",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 317,
+        "y": 72,
+        "wires": [
+            [
+                "c94ac30c.7bccb"
+            ]
+        ],
+        "inputLabels": [
+            "Invalid payload"
+        ]
+    },
+    {
+        "id": "c94ac30c.7bccb",
+        "type": "function",
+        "z": "6844a090.464c2",
+        "name": "extract payload",
+        "func": "//parse OpenWeatherMap API-Response\n\nvar weather = JSON.parse(msg.payload);\n\nvar timestmp = new Date().setFullYear(new Date().getFullYear(), 0, 1);\nvar yearFirstDay = Math.floor(timestmp/86400000);\nvar today = Math.ceil((new Date().getTime())/86400000);\nvar dayOfYear = today - yearFirstDay;\n\nreturn {\n\n    payload: {\n            //date: dayOfYear,\n            date: 254,\n            hour: parseInt(new Date().toString().substring(16, 18)), // +parseInt(weather.offset),\n            mins: parseInt(new Date().toString().substring(19, 21)),\n            temperature: weather.current.temp,\n            humidity: weather.current.humidity,\n            icon: parseInt(weather.daily[0].weather[0].icon.substring(0,2)),\n            rainPrecipProb0: parseInt(weather.hourly[0].pop*100),\n            rainPrecipProb1: parseInt(weather.hourly[1].pop*100),\n            rainPrecipProb2: parseInt(weather.hourly[2].pop*100),\n            rainPrecipProb3: parseInt(weather.hourly[3].pop*100),\n            rainPrecipProb4: parseInt(weather.hourly[4].pop*100),\n            rainPrecipProb5: parseInt(weather.hourly[5].pop*100),\n            rainPrecipProb6: parseInt(weather.hourly[6].pop*100),\n            rainPrecipProb7: parseInt(weather.hourly[7].pop*100),\n            rainPrecipProb8: parseInt(weather.hourly[8].pop*100),\n            rainPrecipProb9: parseInt(weather.hourly[9].pop*100),\n            rainPrecipProb10: parseInt(weather.hourly[10].pop*100),\n            rainPrecipProb11: parseInt(weather.hourly[11].pop*100),\n    },\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 504,
+        "y": 72,
+        "wires": [
+            [
+                "16ce80f1.a17f3f"
+            ]
+        ]
+    },
+    {
+        "id": "22598166.49720e",
+        "type": "inject",
+        "z": "6844a090.464c2",
+        "name": "timer",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "7200",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 124,
+        "y": 45,
+        "wires": [
+            [
+                "59a6efe8.9194d"
+            ]
+        ]
+    },
+    {
+        "id": "34c253c0.6e064c",
+        "type": "ttn uplink",
+        "z": "6844a090.464c2",
+        "name": "ADDYOURDEVICENAMEHERE",
+        "app": "9eb5de23.3697f",
+        "dev_id": "ADDYOURDEVICENAMEHERE",
+        "field": "",
+        "x": 153,
+        "y": 119,
+        "wires": [
+            [
+                "59a6efe8.9194d"
+            ]
+        ]
+    },
+    {
+        "id": "6c5274f6.27085c",
+        "type": "comment",
+        "z": "6844a090.464c2",
+        "name": "My favourite Node",
+        "info": "",
+        "x": 334,
+        "y": 115,
+        "wires": []
+    },
+    {
+        "id": "9eb5de23.3697f",
+        "type": "ttn app",
+        "z": "",
+        "appId": "ADDYOURAPPIDHERE",
+        "accessKey": "ADDYOURACCESSKYHERE",
+        "discovery": "discovery.thethingsnetwork.org:1900"
+    }
+]
