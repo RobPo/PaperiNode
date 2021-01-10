@@ -68,7 +68,7 @@ void loop(){
             SPI.beginTransaction(SPISettings(6000000, MSBFIRST, SPI_MODE0));
             epd.begin(false);
             SPI_Write(RFM_NSS, 0x01, 0x00);          // Switch RFM to sleep
-            epd.printText(String(i++), 40, 10, 3);
+            epd.printText(TimeDate.hours, 40, 10, 3);
             epd.update();
             epd.end();
             digitalWrite(RFM_NSS, LOW);                          // To save power...

@@ -89,13 +89,13 @@ void loop(){
         v_scap = analogRead(A7);       // Measure V_scap
         digitalWrite(SW_TFT, HIGH);    // Turn OFF voltage divider 
   
-        if (v_scap >= 620) {           // Proceed only if (Vscap > 4,0V)--> DEFAULT for 1.5F!
+        if (v_scap >= 589) {           // Proceed only if (Vscap > 3,8V)--> DEFAULT for 1.5F!
           if (++app.Counter%2) {       // Every two hours... 
                app.LoRaWAN_message_interval=58;
    
             LPP.clearBuffer();         // Form a payload according to the LPP standard to 
             LPP.addDigitalOutput(0x00, app.Counter);
-            LPP.addAnalogInput(0x00, v_scap*3.3/1023*2);
+            LPP.addAnalogInput(0x00, v_scap*3.3/1024*2);
 
             SPI.begin();
             SPI.beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE0));
@@ -193,12 +193,12 @@ void loop(){
             epd.fillRectLM(102, 39, 4, r4, EPD_BLACK);
             epd.fillRectLM(107, 39, 4, r5, EPD_BLACK);
 
-            epd.printText("V " + String(v_scap*3.3/1023*2, 1), 115, 20, 1); // Plot last known voltage
+            epd.printText("V " + String(v_scap*3.3/1024*2, 1), 115, 20, 1); // Plot last known voltage
             epd.printText("U " + String(app.Counter/2+1)      , 115, 30, 1); // Plot how many syncs have been tried
             epd.printText("D " + String(app.Counter/2+1 - ndr), 115, 40, 1); // Plot how many downlinks were empty
 
             epd.saveFBToFlash(ADDR_FRAMEBUFFER);
-            if (v_scap > 640)
+            if (v_scap > 640)                                   // IF V_scap > 4.2V
               epd.update();                                     // Trigger a 900ms default update (4GL)
             else
               epd.update(EPD_UPD_MONO);                         // Trigger a 450ms low power update (2GL)
