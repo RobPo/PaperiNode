@@ -18,8 +18,6 @@ ISR(INT1_vect) {                // Interrupt vector for the alarm of the MCP7940
 /********* MAIN ***************************************************************************/
 void setup(void) {  
   analogReference(EXTERNAL);          // use AREF for reference voltage
-  Serial.begin(9600);
-  Serial.println("HelloWorld!");
   SPI.begin();                        // Initialize the SPI port
   SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
   
@@ -32,6 +30,7 @@ void setup(void) {
   digitalWrite(SPI_FLASH_CS, HIGH);   // to save power...
 
   epd.begin();                        // Turn ON & initialize 1.1" EPD
+  SPI_Write(RFM_NSS, 0x01, 0x00);          // Switch RFM to sleep
   //epd.loadFromFlash(ADDR_PIC1, 0);    // Load an pic from external flash
   epd.saveFBToFlash(ADDR_FRAMEBUFFER);// And save it to external framebuffer on flash
   epd.update();                       // Update EPD

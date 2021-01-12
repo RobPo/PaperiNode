@@ -107,7 +107,7 @@ void mcp7940_init (sTimeDate *TimeDate, uint8_t alarm_in_x_minutes)
 	// Write the converted time and date settings to the RTC and print it to the serial port.
 	mcp7940_set_time_and_date(TimeDate);
 	mcp7940_print(TimeDate);
-	
+
 	I2C_write_register(MCP7940_SLAVE_ADDRESS, CONTROL, 0x00);	// Disable the square wave output on the RTC and Alarm 0
 	
 	// Reload alarm 0 to generate an interrupt over x minutes
@@ -120,7 +120,7 @@ void mcp7940_init (sTimeDate *TimeDate, uint8_t alarm_in_x_minutes)
 	I2C_write_register(MCP7940_SLAVE_ADDRESS, CONTROL, 0x10);
 		
 	// read back the set time and date in order to check if the time and date was set properly.
-	mcp7940_read_time_and_date(TimeDate);
+	// mcp7940_read_time_and_date(TimeDate);
 		
 	// Enable the Alarm to generate an external interrupt on a falling edge of INT1
 	EICRA = 0x08;	//	The falling edge of INT1 generates an interrupt request.
