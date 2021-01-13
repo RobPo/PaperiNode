@@ -18,7 +18,7 @@
 	{
 		SEC_MASK	= 0x70,
 		MIN_MASK	= 0x70,
-		HOUR_MASK	= 0x30,
+		HOUR_MASK	= 0x3F,
 		WEEKDAY_MASK= 0x07,
 		DATE_MASK	= 0x30,
 		MONTH_MASK	= 0x10,
