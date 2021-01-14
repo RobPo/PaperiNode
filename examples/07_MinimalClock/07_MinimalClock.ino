@@ -18,6 +18,7 @@ ISR(INT1_vect) {                // Interrupt vector for the alarm of the MCP7940
 /********* MAIN ***************************************************************************/
 void setup(void) {  
   analogReference(EXTERNAL);          // use AREF for reference voltage
+  Serial.begin(9600);
   SPI.begin();                        // Initialize the SPI port
   SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
   
@@ -42,14 +43,13 @@ void setup(void) {
  
   I2C_init();                         // Initialize I2C pins
   mcp7940_init(&TimeDate, 1);   // Generate minutely interrupt 
-
   v_scap = analogRead(A7);            // 1st Dummy-read which always delivers strange values...(to skip)
   RTC_ALARM = true;
 }
 
 void loop(){ 
     if(RTC_ALARM == true){             // Catch the minute alarm from the RTC. 
-        mcp7940_reset_minute_alarm(5);        
+        mcp7940_reset_minute_alarm(5); 
         mcp7940_read_time_and_date(&TimeDate);    
          
         digitalWrite(SW_TFT, LOW);     // Turn ON voltage divider 

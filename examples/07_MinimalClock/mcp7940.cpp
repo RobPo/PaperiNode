@@ -102,11 +102,11 @@ void mcp7940_init (sTimeDate *TimeDate, uint8_t alarm_in_x_minutes)
 		TimeDate->month = 12;
 	}
 	//Serial.print("Converted: ");
-	//mcp7940_print(TimeDate);
+  //mcp7940_print(TimeDate);
 	
 	// Write the converted time and date settings to the RTC and print it to the serial port.
 	mcp7940_set_time_and_date(TimeDate);
-	mcp7940_print(TimeDate);
+	//mcp7940_print(TimeDate);
 
 	I2C_write_register(MCP7940_SLAVE_ADDRESS, CONTROL, 0x00);	// Disable the square wave output on the RTC and Alarm 0
 	
@@ -120,8 +120,9 @@ void mcp7940_init (sTimeDate *TimeDate, uint8_t alarm_in_x_minutes)
 	I2C_write_register(MCP7940_SLAVE_ADDRESS, CONTROL, 0x10);
 		
 	// read back the set time and date in order to check if the time and date was set properly.
-	// mcp7940_read_time_and_date(TimeDate);
-		
+  mcp7940_read_time_and_date(TimeDate);
+	//mcp7940_print(TimeDate);
+	
 	// Enable the Alarm to generate an external interrupt on a falling edge of INT1
 	EICRA = 0x08;	//	The falling edge of INT1 generates an interrupt request.
 	EIMSK = 0x02;	//	Enable the external interrupt
@@ -200,7 +201,7 @@ void mcp7940_read_time_and_date (sTimeDate *TimeDate)
 	// Check the given pointer
 	if(TimeDate == 0)
 		return;
-	
+ 
 	// Read the Time and date from the RTC and convert it to a time and date in decimal values.
 	TimeDate->seconds	= convert_binary_to_decimal(SEC_MASK,  I2C_read_register(MCP7940_SLAVE_ADDRESS, RTC_SEC));
 	TimeDate->minutes	= convert_binary_to_decimal(MIN_MASK,  I2C_read_register(MCP7940_SLAVE_ADDRESS, RTC_MIN));
@@ -232,7 +233,7 @@ void mcp7940_set_time_and_date (sTimeDate *TimeDate)
 	//	Disable the oscillator to stop the RTC while the time and date are configured to prevent roll-overs from occurring while writing new values.
 	I2C_write_register(MCP7940_SLAVE_ADDRESS, RTC_SEC,		0x00);	
 	I2C_write_register(MCP7940_SLAVE_ADDRESS, RTC_MIN,		convert_decimal_to_binary(MIN_MASK,		TimeDate->minutes));
-	I2C_write_register(MCP7940_SLAVE_ADDRESS, RTC_HOUR,		0x40 | convert_decimal_to_binary(HOUR_MASK,	TimeDate->hours));
+	I2C_write_register(MCP7940_SLAVE_ADDRESS, RTC_HOUR,		convert_decimal_to_binary(HOUR_MASK,	TimeDate->hours));
 	I2C_write_register(MCP7940_SLAVE_ADDRESS, WEEKDAY_MASK, convert_decimal_to_binary(WEEKDAY_MASK, TimeDate->weekDay));
 	
 	I2C_write_register(MCP7940_SLAVE_ADDRESS, RTC_DATE,		convert_decimal_to_binary(DATE_MASK,  TimeDate->day));
