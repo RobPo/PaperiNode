@@ -117,32 +117,28 @@ void loop(){
 
             String leadingMonth = "";
             if (lora.RX.Data[17] < 10)
-              leadingMonth = "0";
-              
+              leadingMonth = "0";  
             epd.printText(leadingDay + String(lora.RX.Data[2]) + "." + leadingMonth + String(lora.RX.Data[17])+ ".", 70, 2, 1);
 
             String leadingHour = "";
-            if(lora.RX.Data[3] < 10) {
+            if(lora.RX.Data[3] < 10) 
               leadingHour = " ";
-            }
+            
             String leadingMinute = "";
-            if(lora.RX.Data[4] < 10) {
+            if(lora.RX.Data[4] < 10) 
               leadingMinute = "0";
-            }
             epd.printText(leadingHour + String(lora.RX.Data[3]) + ":" + leadingMinute + String(lora.RX.Data[4]), 110, 2, 1);
     
-            String leadingTemp = "";
-            if(int8_t(lora.RX.Data[0]) > -1 && int8_t(lora.RX.Data[0]) < 10) {
+           String leadingTemp = "";
+            if(int8_t(lora.RX.Data[0]) > -1 && int8_t(lora.RX.Data[0]) < 10)
               leadingTemp = " ";
-            }
             epd.printText(leadingTemp + String(int8_t(lora.RX.Data[0])), 11, 16, 3);  // Temperature
             epd.printText("o", 53, 12, 2);
             epd.printText("C", 65, 16, 3);
     
             String leadingHumi = "";
-            if(int8_t(lora.RX.Data[1]) < 10) {
+            if(int8_t(lora.RX.Data[1]) < 10)
               leadingHumi = " ";
-            }
             epd.printText(leadingHumi + String(uint8_t(lora.RX.Data[1])), 11, 44, 3);  // Humidity
             epd.printText("%", 65, 44, 3);
 
