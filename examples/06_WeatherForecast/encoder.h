@@ -25,7 +25,7 @@ function Encoder(object, port) {
   bytes[28] = parseInt(object.rainPrecipProb8);
   bytes[30] = parseInt(object.rainPrecipProb9);
   bytes[32] = parseInt(object.rainPrecipProb10);
-  bytes[34] = parseInt(object.rainPrecipProb11);
+  bytes[34] = parseInt(object.month);
 
   return bytes;
 }
