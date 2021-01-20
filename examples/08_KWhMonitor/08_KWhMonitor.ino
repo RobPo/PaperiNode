@@ -136,12 +136,9 @@ void loop(){
             char PufferChar[4];
             dtostrf(kWh[counter]/100.0, 3, 1,PufferChar);
             epd.printText(String(PufferChar) + "kWh", 5, 16, 3);  // kWh
-            //epd.printText(" 10kWh", 5, 16, 3);  // kWh
 
-            dtostrf(kWh[counter]/100*0.3, 3, 1,PufferChar);
-            epd.printText(String(PufferChar) + "Eur", 5, 44, 3);  // kWh
-            //epd.printText("3.1Eur", 5, 44, 3);  // kWh
- 
+            dtostrf(kWh[counter]/100.0*0.3, 3, 1,PufferChar);
+            epd.printText(String(PufferChar) + "Eur", 5, 44, 3);  // Cost
  
             epd.fillRectLM(107, 41, 4, 1, EPD_BLACK);
             epd.fillRectLM(112, 41, 4, 1, EPD_BLACK);
