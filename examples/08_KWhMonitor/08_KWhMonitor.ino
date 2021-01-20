@@ -1,14 +1,12 @@
 /****************************************************************************************
-* This example demonstrates a simple weatherforcest demo. The supercap voltage v_scap is 
-* measured minutely while the ATmega328p processor is in deep sleep all remaining time. 
-* Triggering is done via external RTC to minimize current consumption during deep sleep 
-* phase. IF the voltage is charged above a certain limit (ie 4.2V) and a max. number of 
-* allowed Lora syncs is not exceeded, a download of is triggered from the TTN console
-* and the recieved content is printed on the Epaper Screen.
+* This example demonstrates a simple kWh Smart demo, based on an optocoupled smart meter 
+* reader which sends periodically the present kWh reading to the TheThingsNetwork console 
+* via Node-Red flow. Everytime PaperiNode wakes up and syncs with the TTN-backend
+* its triggers a download of the last measured kWh reading (respecting the fair use policy)
 /****************************************************************************************
-* File:               WeatherForecastExample.ino
+* File:               kWhMonitor.ino
 * Author:             Robert Poser
-* Created on:         19-12-2019
+* Created on:         20-01-2021
 * Supported Hardware: LoraPaper (with RFM95, PV cell, supercap & 1.1" EPD)
 * 
 * Libraries used in this sketch are based on the LoRaWAN stack from IDEETRON/NEXUS, for 
