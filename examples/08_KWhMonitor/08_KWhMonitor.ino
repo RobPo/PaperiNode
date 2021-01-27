@@ -1,13 +1,13 @@
 /****************************************************************************************
-* This example demonstrates a simple kWh Smart demo, based on an optocoupled smart meter 
+* This example demonstrates a simple kWh monitor demo, based on an optocoupled smart meter 
 * reader which sends periodically the present kWh reading to the TheThingsNetwork console 
-* via Node-Red flow. Everytime PaperiNode wakes up and syncs with the TTN-backend
+* via Node-Red flow. Everytime PaperiNode wakes up (+3hrs) and syncs with the TTN-backend
 * its triggers a download of the last measured kWh reading (respecting the fair use policy)
 /****************************************************************************************
 * File:               kWhMonitor.ino
 * Author:             Robert Poser
-* Created on:         20-01-2021
-* Supported Hardware: LoraPaper (with RFM95, PV cell, supercap & 1.1" EPD)
+* Created on:         27-01-2021
+* Supported Hardware: PaperiNode (with RFM95, PV cell, supercap & 1.1" EPD)
 * 
 * Libraries used in this sketch are based on the LoRaWAN stack from IDEETRON/NEXUS, for 
 * more infos please check this great source: https://github.com/Ideetron/Nexus-Low-Power
@@ -89,8 +89,8 @@ void loop(){
         v_scap = analogRead(A7);       // Measure V_scap
         digitalWrite(SW_TFT, HIGH);    // Turn OFF voltage divider 
   
-        if (v_scap >= 589) {           // Proceed only if (Vscap > 3,8V)--> DEFAULT for 1.5F!
-          if (++app.Counter%2) {       // Every two hours... 
+        if (v_scap >= 574) {           // Proceed only if (Vscap > 3,8V)--> DEFAULT for 1.5F!
+          if (++app.Counter%3) {       // Every two hours... 
                app.LoRaWAN_message_interval=58;
 
             LPP.clearBuffer();         // Form a payload according to the LPP standard to 
@@ -133,28 +133,31 @@ void loop(){
             kWh[counter] = lora.RX.Data[4];
             char PufferChar[4];
             dtostrf(kWh[counter]/100.0, 3, 1,PufferChar);
-            epd.printText(String(PufferChar) + "kWh", 5, 16, 3);  // kWh
+            epd.printText(String(PufferChar) + "kWh", 0, 17, 3);  // kWh
 
-            dtostrf(kWh[counter]/100.0*0.3, 3, 1,PufferChar);
-            epd.printText(String(PufferChar) + "Eur", 5, 44, 3);  // Cost
+            dtostrf(kWh[counter]/100*30, 3, 1,PufferChar);
+            epd.printText(String(PufferChar) + "ct", 0, 47, 3);  // Cost
+
+            epd.printText("V " + String(v_scap*3.3/1024*2, 1), 115, 17, 1); // Plot last known voltage
+            epd.printText("U " + String(app.Counter/3+1)      , 115, 26, 1); // Plot how many syncs have been tried
+            epd.printText("D " + String(app.Counter/3+1 - ndr+1), 115, 35, 1); // Plot how many downlinks were empty
  
-            epd.fillRectLM(107, 41, 4, 1, EPD_BLACK);
-            epd.fillRectLM(112, 41, 4, 1, EPD_BLACK);
-            epd.fillRectLM(117, 41, 4, 1, EPD_BLACK);
-            epd.fillRectLM(122, 41, 4, 1, EPD_BLACK);
-            uint8_t r1 = kWh[0];
-            uint8_t r2 = kWh[1];
-            uint8_t r3 = kWh[2];
-            uint8_t r4 = kWh[3];
-            epd.fillRectLM(107, 39, 4, r1, EPD_BLACK);
-            epd.fillRectLM(112, 39, 4, r2, EPD_BLACK);
-            epd.fillRectLM(117, 39, 4, r3, EPD_BLACK);
-            epd.fillRectLM(122, 39, 4, r4, EPD_BLACK);
-          
-            epd.printText("V " + String(v_scap*3.3/1024*2, 1), 115, 20, 1); // Plot last known voltage
-            epd.printText("U " + String(app.Counter/2+1)      , 115, 30, 1); // Plot how many syncs have been tried
-            epd.printText("D " + String(app.Counter/2+1 - ndr), 115, 40, 1); // Plot how many downlinks were empty
-
+            epd.fillRectLM(92, 44, 4, 1, EPD_BLACK);
+            epd.fillRectLM(97, 44, 4, 1, EPD_BLACK);
+            epd.fillRectLM(102, 44, 4, 1, EPD_BLACK);
+            epd.fillRectLM(107, 44, 4, 1, EPD_BLACK);
+            epd.fillRectLM(112, 44, 4, 1, EPD_BLACK);
+            epd.fillRectLM(117, 44, 4, 1, EPD_BLACK);
+            epd.fillRectLM(122, 44, 4, 1, EPD_BLACK);
+       
+            epd.fillRectLM(92, 42, 4, kWh[0]/50, EPD_BLACK);
+            epd.fillRectLM(97, 42, 4, kWh[1]/50, EPD_BLACK);
+            epd.fillRectLM(102, 42, 4, kWh[2]/50, EPD_BLACK);
+            epd.fillRectLM(107, 42, 4, 20, EPD_BLACK);
+            epd.fillRectLM(112, 42, 4, 18, EPD_BLACK);
+            epd.fillRectLM(117, 42, 4, 12, EPD_BLACK);
+            epd.fillRectLM(122, 42, 4, 6, EPD_BLACK);
+       
             epd.saveFBToFlash(ADDR_FRAMEBUFFER);
             if (v_scap > 640)                                   // IF V_scap > 4.2V
               epd.update();                                     // Trigger a 900ms default update (4GL)
