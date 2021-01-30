@@ -37,7 +37,6 @@ PL_microEPD epd(EPD_CS, EPD_RST, EPD_BUSY);    //Initialize the EPD.
 volatile bool RTC_ALARM = false;        // Interrupt variable
 uint16_t v_scap, ndr;   
 uint16_t kWh[7];
-uint8_t counter; 
 
 /********* INTERRUPTS *********************************************************************/
 ISR(INT1_vect) {                // Interrupt vector for the alarm of the MCP7940 Real Time 
@@ -90,7 +89,7 @@ void loop(){
         digitalWrite(SW_TFT, HIGH);    // Turn OFF voltage divider 
   
         if (v_scap >= 574) {           // Proceed only if (Vscap > 3,8V)--> DEFAULT for 1.5F!
-          if (++app.Counter%3) {       // Every two hours... 
+          if (++app.Counter%3==1) {       // Every three hours... 
                app.LoRaWAN_message_interval=58;
 
             LPP.clearBuffer();         // Form a payload according to the LPP standard to 
@@ -103,9 +102,9 @@ void loop(){
             lorawan.init();               // Init the RFM95 module
 
             delay(50);
-            lora.RX.Data[6] = 25;         // Dummy value to check lateron if downlink data was received
+            lora.RX.Data[1] = 0;         // Dummy value to check lateron if downlink data was received
             lorawan.LORA_send_and_receive();  // LoRaWAN send_and_receive
-            if (lora.RX.Data[6] == 25)    // Downlink data received?
+            if (lora.RX.Data[1] == 0)    // Downlink data received?
                 ndr++;                    // if not increase nodatareceived (ndr) counter                      
 
             epd.loadFromFlash(ADDR_FRAMEBUFFER);        // Load last image to pre-buffer
@@ -129,14 +128,19 @@ void loop(){
               leadingMinute = "0";
             epd.printText(leadingHour + String(lora.RX.Data[2]) + ":" + leadingMinute + String(lora.RX.Data[3]), 110, 2, 1);
 
-            counter = (counter+1)%7;
-            kWh[counter] = lora.RX.Data[4];
+            for (int i=1; i<7; i++)
+              kWh[i]=kWh[i-1];
+            kWh[0] = lora.RX.Data[4];
             char PufferChar[4];
-            dtostrf(kWh[counter]/100.0, 3, 1,PufferChar);
+            dtostrf(kWh[0]/100.0, 3, 1,PufferChar);
             epd.printText(String(PufferChar) + "kWh", 0, 17, 3);  // kWh
 
-            dtostrf(kWh[counter]/100*30, 3, 1,PufferChar);
-            epd.printText(String(PufferChar) + "ct", 0, 47, 3);  // Cost
+            String leadingCt = "";
+            if (kWh[0]/100*30<100)
+              leadingCt = " ";
+            if (kWh[0]/100*30<10)
+              leadingCt = "  ";
+            epd.printText(leadingCt + String(kWh[0]/100*30) + "ct", 0, 47, 3);  // Cost
 
             epd.printText("V " + String(v_scap*3.3/1024*2, 1), 115, 17, 1); // Plot last known voltage
             epd.printText("U " + String(app.Counter/3+1)      , 115, 26, 1); // Plot how many syncs have been tried
@@ -149,14 +153,14 @@ void loop(){
             epd.fillRectLM(112, 44, 4, 1, EPD_BLACK);
             epd.fillRectLM(117, 44, 4, 1, EPD_BLACK);
             epd.fillRectLM(122, 44, 4, 1, EPD_BLACK);
-       
-            epd.fillRectLM(92, 42, 4, kWh[0]/50, EPD_BLACK);
-            epd.fillRectLM(97, 42, 4, kWh[1]/50, EPD_BLACK);
-            epd.fillRectLM(102, 42, 4, kWh[2]/50, EPD_BLACK);
-            epd.fillRectLM(107, 42, 4, 20, EPD_BLACK);
-            epd.fillRectLM(112, 42, 4, 18, EPD_BLACK);
-            epd.fillRectLM(117, 42, 4, 12, EPD_BLACK);
-            epd.fillRectLM(122, 42, 4, 6, EPD_BLACK);
+            
+            epd.fillRectLM(92, 42, 4, kWh[0]/6, EPD_BLACK);
+            epd.fillRectLM(97, 42, 4, kWh[1]/6, EPD_BLACK);
+            epd.fillRectLM(102, 42, 4, kWh[2]/6, EPD_BLACK);
+            epd.fillRectLM(107, 42, 4, kWh[3]/6, EPD_BLACK);
+            epd.fillRectLM(112, 42, 4, kWh[4]/6, EPD_BLACK);
+            epd.fillRectLM(117, 42, 4, kWh[5]/6, EPD_BLACK);
+            epd.fillRectLM(122, 42, 4, kWh[6]/6, EPD_BLACK);
        
             epd.saveFBToFlash(ADDR_FRAMEBUFFER);
             if (v_scap > 640)                                   // IF V_scap > 4.2V
