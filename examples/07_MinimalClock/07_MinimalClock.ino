@@ -49,7 +49,10 @@ void setup(void) {
 
 void loop(){ 
     if(RTC_ALARM == true){             // Catch the minute alarm from the RTC. 
-        mcp7940_reset_minute_alarm(5); 
+        if (v_scap >= 680)
+          mcp7940_reset_minute_alarm(1); 
+        else
+          mcp7940_reset_minute_alarm(5); 
         mcp7940_read_time_and_date(&TimeDate);    
          
         digitalWrite(SW_TFT, LOW);     // Turn ON voltage divider 
@@ -62,12 +65,12 @@ void loop(){
             SPI.begin();
             SPI.beginTransaction(SPISettings(6000000, MSBFIRST, SPI_MODE0));
             epd.begin(false);
+            epd.loadFromFlash(ADDR_FRAMEBUFFER);        // Load last image to pre-buffer
+            SPI_Write(RFM_NSS, 0x01, 0x00);          // Switch RFM to sleep
             epd.clear(EPD_BLACK);
             epd.drawBitmapLM(0, 18, wIcon_10, 24, 24);
             epd.drawBitmapLM(82, 6, wIcon_10, 24, 24);
             epd.drawBitmapLM(110, 20, wIcon_10, 24, 24);
-            SPI_Write(RFM_NSS, 0x01, 0x00);          // Switch RFM to sleep
-            epd.loadFromFlash(ADDR_FRAMEBUFFER);        // Load last image to pre-buffer
 
             String leadingHour = "";
             if(TimeDate.hours < 10) {
