@@ -49,7 +49,10 @@ void setup(void) {
 
 void loop(){ 
     if(RTC_ALARM == true){             // Catch the minute alarm from the RTC. 
-        mcp7940_reset_minute_alarm(5); 
+        if (v_scap >= 680)
+          mcp7940_reset_minute_alarm(1); 
+        else
+          mcp7940_reset_minute_alarm(5);  
         mcp7940_read_time_and_date(&TimeDate);    
          
         digitalWrite(SW_TFT, LOW);     // Turn ON voltage divider 
